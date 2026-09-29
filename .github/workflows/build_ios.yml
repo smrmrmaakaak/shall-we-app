@@ -1,0 +1,147 @@
+name: Build iOS & Android Apps
+
+on:
+  push:
+    branches: [ master, main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.3'
+          channel: 'stable'
+          cache: true
+
+      - name: Scaffold Native Project Platforms
+        run: |
+          mkdir -p ../temp_backup
+          cp -r lib ../temp_backup/lib
+          cp pubspec.yaml ../temp_backup/pubspec.yaml
+          cp l10n.yaml ../temp_backup/l10n.yaml
+          flutter create --org com.shallwe --project-name shall_we_app --platforms=android,ios .
+          rm -rf lib
+          cp -r ../temp_backup/lib lib
+          cp ../temp_backup/pubspec.yaml pubspec.yaml
+          cp ../temp_backup/l10n.yaml l10n.yaml
+          rm -rf ../temp_backup
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Build Android APK
+        run: flutter build apk --release
+
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ShallWe-Android-APK
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+  build-ios:
+    name: Build iOS App (.ipa)
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.3'
+          channel: 'stable'
+          cache: true
+
+      - name: Scaffold Native Project Platforms
+        run: |
+          mkdir -p ../temp_backup
+          cp -r lib ../temp_backup/lib
+          cp pubspec.yaml ../temp_backup/pubspec.yaml
+          cp l10n.yaml ../temp_backup/l10n.yaml
+          flutter create --org com.shallwe --project-name shall_we_app --platforms=android,ios .
+          rm -rf lib
+          cp -r ../temp_backup/lib lib
+          cp ../temp_backup/pubspec.yaml pubspec.yaml
+          cp ../temp_backup/l10n.yaml l10n.yaml
+          rm -rf ../temp_backup
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Build iOS App Bundle (Unsigned for Testing)
+        run: flutter build ios --release --no-codesign
+
+      - name: Package iOS IPA
+        run: |
+          mkdir -p Payload
+          cp -r build/ios/iphoneos/Runner.app Payload/
+          zip -r ShallWe-iOS.ipa Payload
+          mkdir -p build/ios/outputs
+          mv ShallWe-iOS.ipa build/ios/outputs/
+
+      - name: Upload iOS IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: ShallWe-iOS-IPA
+          path: build/ios/outputs/ShallWe-iOS.ipa
+
+  release:
+    name: Publish Release Packages
+    needs: [build-android, build-ios]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Create Release Directory
+        run: mkdir -p release-artifacts
+
+      - name: Download Android APK
+        uses: actions/download-artifact@v4
+        with:
+          name: ShallWe-Android-APK
+          path: release-artifacts
+
+      - name: Download iOS IPA
+        uses: actions/download-artifact@v4
+        with:
+          name: ShallWe-iOS-IPA
+          path: release-artifacts
+
+      - name: Rename Files for User
+        run: |
+          cd release-artifacts
+          if [ -f app-release.apk ]; then
+            mv app-release.apk ShallWe-Android.apk
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.0-build${{ github.run_number }}
+          name: Shall We? v1.0.0 (Build ${{ github.run_number }})
+          body: |
+            ### 🎫 Shall We? (우리 만날래?) - 데이트 신청 티켓 앱
+            
+            - **안드로이드 설치 파일**: `ShallWe-Android.apk` (스마트폰에서 터치하여 바로 설치)
+            - **아이폰 설치 파일**: `ShallWe-iOS.ipa` (Sideloadly / AltStore / TrollStore를 통해 아이폰에 설치)
+            - **기능**: 성수동 힙스터 티켓 디자인, 한국어/영어/일본어 실시간 전환, 축하 폭죽(Confetti) 효과, 거절 버튼 밀당 인터랙션
+          files: release-artifacts/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

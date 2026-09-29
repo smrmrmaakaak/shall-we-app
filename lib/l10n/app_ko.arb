@@ -1,0 +1,16 @@
+{
+  "@@locale": "ko",
+  "appTitle": "Shall We? (우리 만날래?)",
+  "badgeInvited": "데이트 초대장 도착",
+  "proposalHeadline": "이번 주말,\n나랑 데이트할래?",
+  "ticketNumber": "№ 2026-1018-07",
+  "labelPlace": "장소",
+  "labelDressCode": "드레스코드",
+  "btnAccept": "좋아, 무조건 갈래! ♥",
+  "btnDecline": "일정 다시 잡자",
+  "modalSuccessTitle": "데이트 약속 성사! 🎉",
+  "modalSuccessDesc": "상대방에게 수락 완료 알림이 전송되었습니다.\n아이폰 캘린더에 일정이 자동 등록됩니다!",
+  "navTicket": "초대장",
+  "navCreate": "만들기",
+  "navCalendar": "캘린더"
+}

@@ -1,0 +1,16 @@
+{
+  "@@locale": "ja",
+  "appTitle": "Shall We? (いっしょに?)",
+  "badgeInvited": "デート招待状が届きました",
+  "proposalHeadline": "今週末、\n一緒にデートしない？",
+  "ticketNumber": "№ 2026-1018-07",
+  "labelPlace": "場所",
+  "labelDressCode": "ドレスコード",
+  "btnAccept": "うん、絶対行く！ ♥",
+  "btnDecline": "日程を再調整しよう",
+  "modalSuccessTitle": "デート約束成立！ 🎉",
+  "modalSuccessDesc": "相手に承諾完了通知が送信されました。\nカレンダーに予定が登録されます！",
+  "navTicket": "招待状",
+  "navCreate": "作成する",
+  "navCalendar": "カレンダー"
+}

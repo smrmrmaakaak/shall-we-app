@@ -1,0 +1,16 @@
+{
+  "@@locale": "en",
+  "appTitle": "Shall We?",
+  "badgeInvited": "Date Invitation Arrived",
+  "proposalHeadline": "Weekend Date?\nDinner & Wine with me?",
+  "ticketNumber": "№ 2026-1018-07",
+  "labelPlace": "VENUE",
+  "labelDressCode": "DRESS CODE",
+  "btnAccept": "Yes, I'd Love to! ♥",
+  "btnDecline": "Let's reschedule",
+  "modalSuccessTitle": "Date Accepted! 🎉",
+  "modalSuccessDesc": "Accepted notification has been sent to the sender.\nEvent automatically added to Apple Calendar!",
+  "navTicket": "Invitation",
+  "navCreate": "Create",
+  "navCalendar": "Calendar"
+}

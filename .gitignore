@@ -69,3 +69,5 @@ migrate_working_dir/
 
 desktop.ini
 */desktop.ini
+
+build_outputs/

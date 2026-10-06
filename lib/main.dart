@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'screens/home_ticket_screen.dart';
+import 'screens/home_wax_letter_screen.dart';
 
 void main() {
   runApp(const ShallWeApp());
@@ -39,15 +39,14 @@ class _ShallWeAppState extends State<ShallWeApp> {
         GlobalCupertinoLocalizations.delegate,
       ],
       theme: ThemeData(
-        fontFamily: 'NotoSansKR',
-        scaffoldBackgroundColor: const Color(0xFFF4EFE9),
+        scaffoldBackgroundColor: const Color(0xFFF9F6F0),
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFFE11D48),
-          primary: Colors.black,
+          seedColor: const Color(0xFF850E22),
+          primary: const Color(0xFF850E22),
         ),
         useMaterial3: true,
       ),
-      home: HomeTicketScreen(
+      home: HomeWaxLetterScreen(
         currentLocale: _currentLocale,
         onLocaleChange: _setLocale,
       ),

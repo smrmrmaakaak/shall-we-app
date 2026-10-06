@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Shall We? - Wax Seal Letter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,600&family=Gowun+Batang:wght@400;700&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: #EBE5DB;
+      font-family: 'Gowun Batang', serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      overflow-x: hidden;
+    }
+
+    /* Mobile Container Frame */
+    .phone-container {
+      width: 100%;
+      max-width: 412px;
+      height: 860px;
+      background: #F9F6F0 url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E");
+      border-radius: 44px;
+      box-shadow: 0 25px 60px -15px rgba(50, 40, 30, 0.25), 0 0 0 1px rgba(0,0,0,0.06);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Top App Bar */
+    .app-header {
+      padding: 38px 24px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .brand-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: #1F1917;
+      letter-spacing: -0.5px;
+    }
+
+    .lang-switcher {
+      display: flex;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(190, 180, 165, 0.6);
+      padding: 3px;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .lang-btn {
+      border: none;
+      background: transparent;
+      padding: 4px 10px;
+      font-family: 'Gowun Batang', serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: #7A7067;
+      cursor: pointer;
+      border-radius: 14px;
+      transition: all 0.25s ease;
+    }
+
+    .lang-btn.active {
+      background: #1F1917;
+      color: #FAF8F5;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    /* Envelope & Stage Area */
+    .stage {
+      flex: 1;
+      position: relative;
+      perspective: 1200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px 20px;
+    }
+
+    .envelope-wrapper {
+      width: 320px;
+      height: 440px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    /* Realistic Kraft Envelope Body */
+    .envelope-back {
+      position: absolute;
+      top: 90px;
+      left: 10px;
+      width: 290px;
+      height: 330px;
+      background: linear-gradient(135deg, #CFB897 0%, #B89E78 100%);
+      border-radius: 14px;
+      box-shadow: 0 16px 36px rgba(60, 45, 30, 0.22), inset 0 0 0 1px rgba(255,255,255,0.25);
+      overflow: hidden;
+    }
+
+    /* Gold Foil Edge inside Envelope */
+    .envelope-lining {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      background: #FAF7F2;
+      border-radius: 8px;
+      border: 1px solid #D4AF37;
+      opacity: 0.9;
+      background-image: radial-gradient(#D4AF37 0.75px, transparent 0.75px);
+      background-size: 12px 12px;
+    }
+
+    /* Flap in 3D */
+    .envelope-flap {
+      position: absolute;
+      top: 90px;
+      left: 10px;
+      width: 0;
+      height: 0;
+      border-left: 145px solid transparent;
+      border-right: 145px solid transparent;
+      border-top: 155px solid #C4AB89;
+      transform-origin: top center;
+      transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 40;
+      filter: drop-shadow(0 6px 8px rgba(0,0,0,0.12));
+    }
+
+    .envelope-flap::after {
+      content: '';
+      position: absolute;
+      top: -155px;
+      left: -145px;
+      width: 0;
+      height: 0;
+      border-left: 145px solid transparent;
+      border-right: 145px solid transparent;
+      border-top: 153px solid #D9C3A5;
+    }
+
+    .envelope-wrapper.opened .envelope-flap {
+      transform: rotateX(180deg);
+      z-index: 5;
+    }
+
+    /* Front Pocket of Envelope */
+    .envelope-front-pocket {
+      position: absolute;
+      top: 90px;
+      left: 10px;
+      width: 290px;
+      height: 330px;
+      pointer-events: none;
+      z-index: 30;
+    }
+
+    .pocket-left {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-top: 165px solid transparent;
+      border-bottom: 165px solid transparent;
+      border-left: 150px solid #C9AF8D;
+      border-bottom-left-radius: 14px;
+    }
+
+    .pocket-right {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 0;
+      height: 0;
+      border-top: 165px solid transparent;
+      border-bottom: 165px solid transparent;
+      border-right: 150px solid #C0A480;
+      border-bottom-right-radius: 14px;
+    }
+
+    .pocket-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 145px solid transparent;
+      border-right: 145px solid transparent;
+      border-bottom: 175px solid #BA9E78;
+      border-bottom-left-radius: 14px;
+      border-bottom-right-radius: 14px;
+      filter: drop-shadow(0 -4px 6px rgba(0,0,0,0.06));
+    }
+
+    /* The Ivory Letter Sheet */
+    .letter-sheet {
+      position: absolute;
+      top: 105px;
+      left: 20px;
+      width: 270px;
+      height: 350px;
+      background: #FFFEFA url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperNoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperNoise)' opacity='0.02'/%3E%3C/svg%3E");
+      border-radius: 12px;
+      box-shadow: 0 12px 30px rgba(45, 30, 20, 0.18), 0 0 0 1px rgba(220, 205, 185, 0.4);
+      padding: 32px 22px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      z-index: 20;
+      transition: transform 1.1s cubic-bezier(0.34, 1.45, 0.7, 1), box-shadow 0.5s ease;
+      transform: translateY(0) rotate(0deg);
+    }
+
+    /* Golden Corner Ornaments */
+    .corner-filigree {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border: 1px solid #D4AF37;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    .corner-tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+    .corner-tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+    .corner-bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+    .corner-br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+    /* Open State for Letter */
+    .envelope-wrapper.opened .letter-sheet {
+      transform: translateY(-95px) rotate(4deg);
+      z-index: 50;
+      box-shadow: 0 24px 50px rgba(45, 30, 20, 0.28), 0 0 0 1px rgba(220, 205, 185, 0.7);
+    }
+
+    .letter-title {
+      font-family: 'Gowun Batang', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #1F1917;
+      line-height: 1.35;
+      margin-top: 14px;
+      margin-bottom: 20px;
+      white-space: pre-line;
+      letter-spacing: -0.3px;
+    }
+
+    .letter-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 140px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .letter-divider::before, .letter-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #C5B08A, transparent);
+    }
+    .letter-divider span {
+      padding: 0 8px;
+      font-size: 11px;
+      color: #B59B6A;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+    }
+
+    .letter-date {
+      font-size: 14px;
+      font-weight: 700;
+      color: #2F2723;
+      margin-bottom: 6px;
+      letter-spacing: 0.2px;
+    }
+
+    .letter-place {
+      font-size: 13px;
+      font-weight: 500;
+      color: #554A43;
+      margin-bottom: 18px;
+    }
+
+    .letter-memo {
+      font-size: 11px;
+      color: #8C7C72;
+      line-height: 1.6;
+      max-width: 220px;
+      background: rgba(245, 240, 230, 0.5);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px dashed rgba(200, 180, 150, 0.4);
+    }
+
+    /* 3D Crimson Red Wax Seal */
+    .wax-seal {
+      position: absolute;
+      top: 220px;
+      left: 125px;
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle at 35% 35%, #A6162D 0%, #7A0A1C 65%, #500410 100%);
+      border-radius: 50%;
+      box-shadow: 0 8px 18px rgba(60, 10, 18, 0.45), inset 0 2px 4px rgba(255,255,255,0.4), inset 0 -3px 6px rgba(0,0,0,0.5);
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .wax-seal::before {
+      content: '';
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
+      border-radius: 50%;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+    }
+
+    .wax-seal-icon {
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.85);
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.6));
+    }
+
+    .envelope-wrapper.opened .wax-seal {
+      top: 320px;
+      left: 60px;
+      transform: scale(0.9) rotate(-8deg);
+      opacity: 0.95;
+    }
+
+    /* Dried Flower Accent */
+    .dried-flower {
+      position: absolute;
+      bottom: 25px;
+      right: 5px;
+      width: 90px;
+      height: 150px;
+      pointer-events: none;
+      z-index: 70;
+      transition: transform 0.8s ease;
+      filter: drop-shadow(0 10px 15px rgba(50, 35, 25, 0.22));
+    }
+
+    .envelope-wrapper.opened .dried-flower {
+      transform: translateY(10px) rotate(6deg);
+    }
+
+    /* Open Hint Pill */
+    .tap-hint {
+      position: absolute;
+      bottom: 28px;
+      background: rgba(31, 25, 23, 0.85);
+      color: #FAF8F5;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 16px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      animation: bounceHint 2s infinite ease-in-out;
+      pointer-events: none;
+      z-index: 80;
+      transition: opacity 0.4s ease;
+    }
+
+    .envelope-wrapper.opened .tap-hint {
+      opacity: 0;
+    }
+
+    @keyframes bounceHint {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    /* Bottom Action Buttons */
+    .button-group {
+      padding: 16px 24px 34px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 100;
+    }
+
+    .btn-accept {
+      width: 100%;
+      height: 56px;
+      background: linear-gradient(135deg, #870C23 0%, #680519 100%);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 28px;
+      font-family: 'Gowun Batang', serif;
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(120, 10, 30, 0.35);
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .btn-accept:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(120, 10, 30, 0.45);
+    }
+
+    .btn-accept:active {
+      transform: scale(0.98);
+    }
+
+    .btn-decline {
+      width: 100%;
+      height: 48px;
+      background: rgba(245, 240, 230, 0.9);
+      color: #3B312C;
+      border: 1.5px solid #D5C7B5;
+      border-radius: 24px;
+      font-family: 'Gowun Batang', serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-decline:hover {
+      background: #FFFFFF;
+      border-color: #BDB09E;
+    }
+
+    /* Confetti Canvas */
+    #confetti-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* Success Modal */
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(25, 18, 14, 0.65);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: #FFFDF9;
+      border-radius: 30px;
+      padding: 32px 24px;
+      text-align: center;
+      width: 100%;
+      max-width: 320px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+      transform: scale(0.85);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: scale(1);
+    }
+
+    .modal-icon {
+      width: 68px;
+      height: 68px;
+      margin: 0 auto 16px;
+      background: #800A1F;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      color: #FFFFFF;
+      box-shadow: 0 8px 20px rgba(128, 10, 31, 0.35);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-container">
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Top App Bar -->
+    <header class="app-header">
+      <div class="brand-logo">Shall We</div>
+      <div class="lang-switcher">
+        <button class="lang-btn active" onclick="setLanguage('ko')">KO</button>
+        <button class="lang-btn" onclick="setLanguage('en')">EN</button>
+        <button class="lang-btn" onclick="setLanguage('ja')">JA</button>
+      </div>
+    </header>
+
+    <!-- Interactive Envelope Stage -->
+    <main class="stage">
+      <div class="envelope-wrapper opened" id="envelope" onclick="toggleEnvelope()">
+        <!-- Envelope Back -->
+        <div class="envelope-back">
+          <div class="envelope-lining"></div>
+        </div>
+
+        <!-- 3D Flap -->
+        <div class="envelope-flap"></div>
+
+        <!-- Sliding Ivory Letter Paper -->
+        <div class="letter-sheet" id="letter">
+          <div class="corner-filigree corner-tl"></div>
+          <div class="corner-filigree corner-tr"></div>
+          <div class="corner-filigree corner-bl"></div>
+          <div class="corner-filigree corner-br"></div>
+
+          <h1 class="letter-title" id="titleText">이번 주말에&#10;시간 어때?</h1>
+          <div class="letter-divider">
+            <span>❦</span>
+          </div>
+          <div class="letter-date" id="dateText">10월 18일 토요일 18:30</div>
+          <div class="letter-place" id="placeText">성수동 캔들 비스트로</div>
+          <div class="letter-memo" id="memoText">와인이랑 트러플 라자냐 예약 완료! 꼭 와줘 :)</div>
+        </div>
+
+        <!-- Front Pocket -->
+        <div class="envelope-front-pocket">
+          <div class="pocket-left"></div>
+          <div class="pocket-right"></div>
+          <div class="pocket-bottom"></div>
+        </div>
+
+        <!-- 3D Red Wax Seal Stamp -->
+        <div class="wax-seal" id="waxSeal">
+          <div class="wax-seal-icon">🍷</div>
+        </div>
+
+        <!-- Dried Lavender Bouquet SVG -->
+        <svg class="dried-flower" viewBox="0 0 100 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Stems -->
+          <path d="M50 160C45 110 35 60 30 20" stroke="#7A8068" stroke-width="2" stroke-linecap="round"/>
+          <path d="M52 160C50 115 58 70 65 30" stroke="#878D73" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M51 160C51 120 48 85 45 40" stroke="#6F755E" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Baby's breath little white flowers -->
+          <circle cx="28" cy="45" r="3.5" fill="#F4EFE6" stroke="#D1C4B0"/>
+          <circle cx="34" cy="35" r="4" fill="#FFFFFF" stroke="#E6DAC8"/>
+          <circle cx="25" cy="25" r="3" fill="#F7F2EA"/>
+          <circle cx="40" cy="50" r="3" fill="#FAF6F0"/>
+          <!-- Lavender Purple Buds -->
+          <ellipse cx="64" cy="40" rx="3.5" ry="5.5" fill="#6B5B95" transform="rotate(-15 64 40)"/>
+          <ellipse cx="68" cy="48" rx="3" ry="5" fill="#806DAB" transform="rotate(15 68 48)"/>
+          <ellipse cx="62" cy="55" rx="3.5" ry="5" fill="#58467D"/>
+          <ellipse cx="67" cy="62" rx="3" ry="5" fill="#75629E"/>
+          <ellipse cx="63" cy="70" rx="3.5" ry="5" fill="#63518A"/>
+          <ellipse cx="66" cy="80" rx="3" ry="4.5" fill="#8A77B5"/>
+        </svg>
+
+        <div class="tap-hint" id="tapHint">편지를 터치해보세요 ✨</div>
+      </div>
+    </main>
+
+    <!-- Bottom Action Buttons -->
+    <footer class="button-group">
+      <button class="btn-accept" id="btnAccept" onclick="onAcceptClick()">
+        <span id="acceptLabel">좋아, 무조건 갈래!</span>
+        <span>♥</span>
+      </button>
+      <button class="btn-decline" id="btnDecline" onclick="onDeclineClick()">일정 다시 잡자</button>
+    </footer>
+
+    <!-- RSVP Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal-card">
+        <div class="modal-icon">💌</div>
+        <h2 style="font-size: 20px; font-weight: 700; color: #1F1917; margin-bottom: 8px;" id="modalTitle">초대장 수락 완료!</h2>
+        <p style="font-size: 13px; color: #665A52; line-height: 1.5; margin-bottom: 22px;" id="modalDesc">
+          상대방에게 수락 알림이 전송되었어요.<br>아이폰 캘린더에 일정이 등록되었습니다.
+        </p>
+        <button class="btn-accept" style="height: 48px; font-size: 14px;" onclick="closeModal()">확인 (성사 완료)</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentLang = 'ko';
+    let declineCount = 0;
+
+    const contentData = {
+      ko: {
+        title: "이번 주말에\n시간 어때?",
+        date: "10월 18일 토요일 18:30",
+        place: "성수동 캔들 비스트로",
+        memo: "와인이랑 트러플 라자냐 예약 완료! 꼭 와줘 :)",
+        accept: "좋아, 무조건 갈래!",
+        declines: ["일정 다시 잡자", "진짜 안 갈 거야? 🥺", "맛있는 와인도 준비했는데..", "내가 다 살게! 그래도?", "마지막 기회야! 🍷"],
+        modalTitle: "초대장 수락 완료! 🍷",
+        modalDesc: "상대방에게 수락 알림이 전송되었어요.<br>캘린더에 일정이 자동으로 등록되었습니다.",
+        hint: "편지를 터치해보세요 ✨"
+      },
+      en: {
+        title: "Are you free\nthis weekend?",
+        date: "Saturday, Oct 18 · 18:30",
+        place: "Seongsu Candle Bistro",
+        memo: "Truffle lasagna & natural wine reserved. Please come :)",
+        accept: "Yes, I'd love to!",
+        declines: ["Check calendar later", "Really...? 🥺", "I already reserved the table!", "My treat, still no?", "Last chance! 🍷"],
+        modalTitle: "It's a Date! 🥂",
+        modalDesc: "Acceptance notification sent.<br>Event added to your calendar automatically.",
+        hint: "Tap the letter ✨"
+      },
+      ja: {
+        title: "今週末、\n時間空いてる？",
+        date: "10月18日 (土) 18:30",
+        place: "聖水洞 キャンドルビ스트ロ",
+        memo: "トリュフラザニアとワイン予約したよ！絶対来てね :)",
+        accept: "うん、絶対行く！",
+        declines: ["日程また確認するね", "え、本当に...？ 🥺", "美味しいワイン用意したのに！", "奢るから行こうよ！", "ラストチャンスだよ！ 🍷"],
+        modalTitle: "デート約束成立！ 🥂",
+        modalDesc: "お相手に承認通知が送信されました。<br>カレンダーにも自動登録完了！",
+        hint: "手紙をタップしてみて ✨"
+      }
+    };
+
+    function toggleEnvelope() {
+      const envelope = document.getElementById('envelope');
+      envelope.classList.toggle('opened');
+    }
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.toLowerCase() === lang);
+      });
+      const data = contentData[lang];
+      document.getElementById('titleText').innerHTML = data.title.replace('\n', '<br>');
+      document.getElementById('dateText').textContent = data.date;
+      document.getElementById('placeText').textContent = data.place;
+      document.getElementById('memoText').textContent = data.memo;
+      document.getElementById('acceptLabel').textContent = data.accept;
+      document.getElementById('modalTitle').textContent = data.modalTitle;
+      document.getElementById('modalDesc').innerHTML = data.modalDesc;
+      document.getElementById('tapHint').textContent = data.hint;
+      declineCount = 0;
+      document.getElementById('btnDecline').textContent = data.declines[0];
+    }
+
+    function onDeclineClick() {
+      const data = contentData[currentLang];
+      declineCount = (declineCount + 1) % data.declines.length;
+      const btn = document.getElementById('btnDecline');
+      btn.textContent = data.declines[declineCount];
+      
+      // playful shake
+      btn.style.transform = 'scale(0.96)';
+      setTimeout(() => btn.style.transform = 'scale(1)', 150);
+    }
+
+    function onAcceptClick() {
+      triggerConfetti();
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+    }
+
+    // Confetti implementation
+    function triggerConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+
+      const particles = [];
+      const colors = ['#870C23', '#D4AF37', '#E5A93C', '#FFF0D4', '#7A0A1C'];
+
+      for (let i = 0; i < 90; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height * 0.65,
+          vx: (Math.random() - 0.5) * 16,
+          vy: -Math.random() * 18 - 4,
+          size: Math.random() * 8 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          rotationSpeed: (Math.random() - 0.5) * 12,
+          opacity: 1
+        });
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let active = false;
+
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.45; // gravity
+          p.vx *= 0.98;
+          p.rotation += p.rotationSpeed;
+          p.opacity -= 0.009;
+
+          if (p.opacity > 0) {
+            active = true;
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.rotation * Math.PI) / 180);
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = Math.max(0, p.opacity);
+            ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+            ctx.restore();
+          }
+        });
+
+        if (active) {
+          requestAnimationFrame(animate);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+
+      animate();
+    }
+  </script>
+</body>
+</html>
